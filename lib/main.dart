@@ -1,68 +1,49 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
+//import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() {
-  return runApp(
-    MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.red,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('Dicee App'),
-          backgroundColor: Colors.red,
+  return runApp(XylophoneApp());
+}
+
+class XylophoneApp extends StatelessWidget {
+  void playSound(int? soundNumber) {
+    final player = AudioCache();
+    player.play('note$soundNumber.wav');
+  }
+
+  Expanded buildKey({Color? color, int? soundNumber}) {
+    return Expanded(
+      child: TextButton(
+        child: Container(
+          color: color,
         ),
-        body: DicePage(),
+        onPressed: () {
+          playSound(soundNumber);
+        },
       ),
-    ),
-  );
-}
-
-class DicePage extends StatefulWidget {
-  DicePage({Key? key}) : super(key: key);
-
-  @override
-  _DicePageState createState() => _DicePageState();
-}
-
-class _DicePageState extends State<DicePage> {
-  int leftDiceNumber = 1;
-  int rightDiceNumber = 1;
-
-  changeDice() {
-    setState(() {
-      leftDiceNumber = Random().nextInt(6) + 1;
-      rightDiceNumber = Random().nextInt(6) + 1;
-    });
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextButton(
-                child: Image.asset('images/dice$leftDiceNumber.png'),
-                onPressed: () {
-                  changeDice();
-                },
-              ),
-            ),
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.black,
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              buildKey(color: Colors.red, soundNumber: 1),
+              buildKey(color: Colors.orange, soundNumber: 2),
+              buildKey(color: Colors.yellow, soundNumber: 3),
+              buildKey(color: Colors.green, soundNumber: 4),
+              buildKey(color: Colors.teal, soundNumber: 5),
+              buildKey(color: Colors.blue, soundNumber: 6),
+              buildKey(color: Colors.purple, soundNumber: 7),
+            ],
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextButton(
-                child: Image.asset('images/dice$rightDiceNumber.png'),
-                onPressed: () {
-                  changeDice();
-                },
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
